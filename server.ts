@@ -21,12 +21,25 @@ try {
 const router = jsonServer.router('fake-db.json');
 
 server.use(middlewares);
+server.use(jsonServer.bodyParser);
+
 server.use((req, _, next) => {
-  console.log(req.headers);
+  //console.log(req.headers);
   next();
 });
 
+server.use(
+  jsonServer.rewriter({
+    '/users/:id': '/users/:id?_id=:id',
+  }),
+);
+(router as any).render = (req: any, res: any) => {
+  const id = req.query._id;
+  res.jsonp(req.method === 'DELETE' && res.statusCode === 200 && id ? { success: true, id } : res.locals.data);
+};
+
 server.use(router);
+
 server.listen(4000, () => {
   console.log('JSON Server is running');
 });
