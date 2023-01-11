@@ -3,77 +3,11 @@ import { css } from '@emotion/react';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import React from 'react';
 import fakeUsers from '../data/fakeUsers';
+import { isErrorWithMessage, isFetchBaseQueryError } from '../store/helpers';
+import { useGetAllUsersQuery } from '../store';
 import { User } from '../types';
 import Avatar from './Avatar';
-/*
-type Person = {
-  firstName: string;
-  lastName: string;
-  age: number;
-  visits: number;
-  status: string;
-  progress: number;
-};
 
-const defaultData: Person[] = [
-  {
-    firstName: 'tanner',
-    lastName: 'linsley',
-    age: 24,
-    visits: 100,
-    status: 'In Relationship',
-    progress: 50,
-  },
-  {
-    firstName: 'tandy',
-    lastName: 'miller',
-    age: 40,
-    visits: 40,
-    status: 'Single',
-    progress: 80,
-  },
-  {
-    firstName: 'joe',
-    lastName: 'dirte',
-    age: 45,
-    visits: 20,
-    status: 'Complicated',
-    progress: 10,
-  },
-];
-
-const columnHelper = createColumnHelper<Person>();
-
-const columns = [
-  columnHelper.accessor('firstName', {
-    cell: info => info.getValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.lastName, {
-    id: 'lastName',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Last Name</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('age', {
-    header: () => 'Age',
-    cell: info => info.renderValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('visits', {
-    header: () => <span>Visits</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('status', {
-    header: 'Status',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('progress', {
-    header: 'Profile Progress',
-    footer: info => info.column.id,
-  }),
-];
-*/
 const columnHelper = createColumnHelper<User>();
 
 const columns = [
@@ -96,10 +30,10 @@ const columns = [
   }),
 ];
 
-const usersData = fakeUsers();
-
 function Table() {
-  const [data, setData] = React.useState(() => [...usersData]);
+  //  const [userTableData, setUserTableData] = React.useState<User[]>([]);
+
+  const { data = [], isLoading, isError, error } = useGetAllUsersQuery();
 
   const table = useReactTable({
     data,
@@ -107,6 +41,19 @@ function Table() {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  if (isLoading) return <span>Loading ...</span>;
+  if (isError) {
+    if (isFetchBaseQueryError(error)) {
+      const errMsg = 'error' in error ? error.error : JSON.stringify({ status: error.status, data: error.data }, null, 2);
+      return (
+        <div>
+          Error! <pre>{errMsg}</pre>
+        </div>
+      );
+    } else if (isErrorWithMessage(error)) {
+      return <div>Error! {error.message}</div>;
+    }
+  }
   return (
     <div className="p-2">
       <table>
