@@ -4,7 +4,7 @@ import Table from './table/UsersTable';
 
 function App() {
   return (
-    <Container fluid>
+    <Container className="my-4">
       <Table />
     </Container>
   );
