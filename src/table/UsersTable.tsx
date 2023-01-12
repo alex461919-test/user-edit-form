@@ -1,34 +1,36 @@
 /** @jsxImportSource @emotion/react */
+import React from 'react';
 import { css } from '@emotion/react';
 import { Table as RBSTable } from 'react-bootstrap';
 import {
-  Column,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import fakeUsers from '../data/fakeUsers';
 import { isErrorWithMessage, isFetchBaseQueryError } from '../store/helpers';
 import { useGetAllUsersQuery } from '../store';
 import { User } from '../types';
 import Avatar from './Avatar';
-import React, { useCallback } from 'react';
 import Paginator from './Paginator';
+import GlobalFilter from './GlobalFilter';
 
 const columnHelper = createColumnHelper<User>();
 
 const columns = [
   columnHelper.accessor('id', {
     header: 'Id',
+    enableGlobalFilter: false,
   }),
   columnHelper.accessor('avatar', {
     header: '',
     cell: props => Avatar(props.getValue()),
     enableSorting: false,
+    enableGlobalFilter: false,
   }),
   columnHelper.accessor(row => `${row.lastName} ${row.firstName}`, {
     id: 'fullName',
@@ -57,20 +59,23 @@ const pageSizeSet = [10, 20, 30, 40, 50];
 
 function Table() {
   //  const [userTableData, setUserTableData] = React.useState<User[]>([]);
-
   const { data = [], isLoading, isError, error } = useGetAllUsersQuery();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const [globalFilter, setGlobalFilter] = React.useState('');
 
   const table = useReactTable({
     data,
     columns,
     state: {
       sorting,
+      globalFilter,
     },
     initialState: { pagination: { pageIndex: 0, pageSize: pageSizeSet[0] } },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
@@ -88,22 +93,22 @@ function Table() {
       return <div>Error! {error.message}</div>;
     }
   }
-  /*
-  console.log('page: ', table.getState().pagination.pageIndex + 1);
-  console.log('total: ', table.getCoreRowModel().rows.length);
-  console.log('pageSize: ', table.getState().pagination.pageSize);
-*/
+
+  const rowsCount = table.getFilteredRowModel().rows.length;
   return (
     <>
       <Paginator
         page={table.getState().pagination.pageIndex + 1}
-        total={table.getCoreRowModel().rows.length}
+        total={rowsCount}
         changePage={page => table.setPageIndex(page - 1)}
         pageSize={table.getState().pagination.pageSize}
         setPageSize={table.setPageSize}
         pageSizeSet={pageSizeSet}
         className="justify-content-start my-4"
       />
+
+      <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} total={rowsCount} className="w-50 my-5" />
+
       <RBSTable responsive hover borderless>
         <thead className="table-secondary">
           {table.getHeaderGroups().map(headerGroup => (
@@ -157,6 +162,5 @@ function Table() {
     </>
   );
 }
-//             return <th key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</th>;
 
 export default Table;
