@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { css } from '@emotion/react';
-import { Table as RBSTable } from 'react-bootstrap';
+import { Button, Table as RBSTable } from 'react-bootstrap';
 import {
   createColumnHelper,
   flexRender,
@@ -9,6 +9,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
@@ -18,6 +19,8 @@ import { User } from '../types';
 import Avatar from './Avatar';
 import Paginator from './Paginator';
 import GlobalFilter from './GlobalFilter';
+import ShowError from './ShowError';
+import UserEditModalForm from './EditForm';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -80,23 +83,45 @@ function Table() {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
+  type T10 = { show: true; user: User } | { show: false; user?: undefined };
+
+  const [{ show: editFormShow, user: selectedUser }, setEditFormState] = React.useState<T10>({ show: false });
+  const [addFormShow, setAddFormShowState] = React.useState(false);
+
+  const handleRowClick = (row: Row<User>) => {
+    !editFormShow && setEditFormState({ show: true, user: row.original });
+  };
+
+  const handleAddButtonClick = () => {
+    !addFormShow && setAddFormShowState(true);
+  };
+
   if (isLoading) return <span>Loading ...</span>;
   if (isError) {
-    if (isFetchBaseQueryError(error)) {
-      const errMsg = 'error' in error ? error.error : JSON.stringify({ status: error.status, data: error.data }, null, 2);
-      return (
-        <div>
-          Error! <pre>{errMsg}</pre>
-        </div>
-      );
-    } else if (isErrorWithMessage(error)) {
-      return <div>Error! {error.message}</div>;
-    }
+    return <ShowError error={error} />;
   }
 
   const rowsCount = table.getFilteredRowModel().rows.length;
+
   return (
     <>
+      {editFormShow && (
+        <UserEditModalForm
+          user={selectedUser}
+          onClose={() => {
+            setEditFormState({ show: false });
+          }}
+        />
+      )}
+
+      {addFormShow && (
+        <UserEditModalForm
+          onClose={() => {
+            setAddFormShowState(false);
+          }}
+        />
+      )}
+
       <Paginator
         page={table.getState().pagination.pageIndex + 1}
         total={rowsCount}
@@ -107,7 +132,14 @@ function Table() {
         className="justify-content-start my-4"
       />
 
-      <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} total={rowsCount} className="w-50 my-5" />
+      <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} total={rowsCount} className="w-50 my-4" />
+
+      <div className="my-4">
+        <Button variant="primary" onClick={handleAddButtonClick}>
+          <i className="bi bi-person-plus me-3"></i>
+          Новый пользователь
+        </Button>
+      </div>
 
       <RBSTable responsive hover borderless>
         <thead className="table-secondary">
@@ -140,7 +172,7 @@ function Table() {
         </thead>
         <tbody>
           {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
+            <tr key={row.id} onClick={event => handleRowClick(row)}>
               {row.getVisibleCells().map(cell => (
                 <td key={cell.id} role="button">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

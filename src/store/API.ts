@@ -25,6 +25,10 @@ export const userApi = createApi({
         method: 'POST',
         body,
       }),
+      transformErrorResponse: (response, meta, arg) => ({
+        ...response,
+        message: `Ошибка создания нового пользавателя. Status: ${response.status}`,
+      }),
       invalidatesTags: [{ type: 'User', id: 'LIST' }],
     }),
 
@@ -34,6 +38,10 @@ export const userApi = createApi({
         method: 'PUT',
         body: patch,
       }),
+      transformErrorResponse: (response, meta, arg) => ({
+        ...response,
+        message: `Ошибка изменения данных пользавателя. Status: ${response.status}`,
+      }),
       invalidatesTags: (result, error, { id }) => [{ type: 'User', id }],
     }),
 
@@ -42,6 +50,7 @@ export const userApi = createApi({
         url: `users/${id}`,
         method: 'DELETE',
       }),
+      transformErrorResponse: (response, meta, arg) => ({ ...response, message: `Ошибка удаления пользавателя. Status: ${response.status}` }),
       invalidatesTags: (result, error, id) => [{ type: 'User', id }],
     }),
   }),
