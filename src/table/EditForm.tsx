@@ -3,10 +3,14 @@ import { css } from '@emotion/react';
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import MaskedInput from 'react-text-mask';
-
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from '../store';
 import { User } from '../types';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import ru from 'date-fns/locale/ru';
+
+registerLocale('ru', ru);
 
 interface UserEditModalFormProps {
   user?: User;
@@ -31,7 +35,6 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
   } = useForm<User>({ defaultValues: { phone: ' ', ...user } });
 
   const [error, setError] = React.useState('');
-
   const [addUser] = useAddUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
@@ -39,7 +42,6 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
   const userId = getValues().id;
 
   const handleSave: SubmitHandler<User> = data => {
-    console.log(data);
     (userId ? updateUser(data) : addUser(data))
       .unwrap()
       .then(onClose)
@@ -67,19 +69,6 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
         <Form css={formStyle} onSubmit={handleSubmit(handleSave)}>
           <Form.Group className="mb-3">
             <Form.Label size="sm" className="required">
-              Email адрес
-            </Form.Label>
-            <Form.Control
-              size="sm"
-              type="email"
-              //    placeholder="Введите email"
-              {...register('email', { required: true })}
-              {...(errors.email ? { isInvalid: true } : null)}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label size="sm" className="required">
               Имя
             </Form.Label>
             <Form.Control
@@ -105,23 +94,69 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Check inline label="Муж." type="radio" {...register('sex')} value="male" />
-            <Form.Check inline label="Жен." type="radio" {...register('sex')} value="female" />
+            <Form.Check
+              inline
+              label="Муж."
+              type="radio"
+              value="male"
+              {...register('sex', { required: true })}
+              {...(errors.sex ? { isInvalid: true } : null)}
+            />
+            <Form.Check
+              inline
+              label="Жен."
+              type="radio"
+              value="female"
+              {...register('sex', { required: true })}
+              {...(errors.sex ? { isInvalid: true } : null)}
+            />
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label size="sm">День рождения</Form.Label>
-            <Form.Control
-              size="sm"
-              type="text"
-              {...register('birthdate', { required: false })}
-              {...(errors.birthdate ? { isInvalid: true } : null)}
+            <Form.Label size="sm" className="required">
+              День рождения
+            </Form.Label>
+            <Controller
+              name="birthdate"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: fields }) => {
+                const { value, ..._fields } = { ...fields, selected: fields.value ? new Date(fields.value) : null };
+                return (
+                  <Form.Control
+                    as={DatePicker}
+                    size="sm"
+                    type="text"
+                    {...(errors.birthdate ? { isInvalid: true } : null)}
+                    {..._fields}
+                    locale="ru"
+                    dateFormat="dd.MM.yyyy"
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                  />
+                );
+              }}
             />
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label size="sm">Аватарка</Form.Label>
             <Form.Control size="sm" type="text" {...register('avatar', { required: false })} {...(errors.avatar ? { isInvalid: true } : null)} />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label size="sm" className="required">
+              Email адрес
+            </Form.Label>
+            <Form.Control
+              size="sm"
+              type="email"
+              //    placeholder="Введите email"
+              {...register('email', { required: true })}
+              {...(errors.email ? { isInvalid: true } : null)}
+            />
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -165,3 +200,14 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
 }
 
 export default UserEditModalForm;
+
+/*
+
+          <DatePicker
+            selected={startDate}
+            onChange={date => {
+              console.log(date);
+              setStartDate(date);
+            }}
+          />
+*/
