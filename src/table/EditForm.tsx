@@ -1,8 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
-import { Alert, Button, Col, Form, Modal, Row } from 'react-bootstrap';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Button, Form, Modal } from 'react-bootstrap';
+import MaskedInput from 'react-text-mask';
+
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from '../store';
 import { User } from '../types';
 
@@ -23,9 +25,10 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     getValues,
-  } = useForm<User>({ defaultValues: { ...user } });
+  } = useForm<User>({ defaultValues: { phone: ' ', ...user } });
 
   const [error, setError] = React.useState('');
 
@@ -36,6 +39,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
   const userId = getValues().id;
 
   const handleSave: SubmitHandler<User> = data => {
+    console.log(data);
     (userId ? updateUser(data) : addUser(data))
       .unwrap()
       .then(onClose)
@@ -97,6 +101,46 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
               //   placeholder="Введите фамилию"
               {...register('lastName', { required: true })}
               {...(errors.lastName ? { isInvalid: true } : null)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Check inline label="Муж." type="radio" {...register('sex')} value="male" />
+            <Form.Check inline label="Жен." type="radio" {...register('sex')} value="female" />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label size="sm">День рождения</Form.Label>
+            <Form.Control
+              size="sm"
+              type="text"
+              {...register('birthdate', { required: false })}
+              {...(errors.birthdate ? { isInvalid: true } : null)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label size="sm">Аватарка</Form.Label>
+            <Form.Control size="sm" type="text" {...register('avatar', { required: false })} {...(errors.avatar ? { isInvalid: true } : null)} />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label size="sm" className="required">
+              Телефон
+            </Form.Label>
+            <Controller
+              name="phone"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Form.Control
+                  as={MaskedInput}
+                  size="sm"
+                  type="text"
+                  mask={['+', '3', '8', '0', ' ', '(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]}
+                  {...field}
+                />
+              )}
             />
           </Form.Group>
         </Form>
