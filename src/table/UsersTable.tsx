@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css } from '@emotion/react';
 import { Button, Table as RBSTable } from 'react-bootstrap';
 import {
@@ -21,6 +21,8 @@ import Paginator from './Paginator';
 import GlobalFilter from './GlobalFilter';
 import ShowError from './ShowError';
 import UserEditModalForm from './EditForm';
+import { useAddToast } from '../Notify/toasts';
+import { ErrorToast, LoadingToast } from '../Notify/LoadingWait';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -95,7 +97,26 @@ function Table() {
   };
   const hideModalForm = React.useCallback(() => setModalEditFormState({ show: false }), []);
 
-  if (isLoading) return <span>Loading ...</span>;
+  const addToast = useAddToast();
+
+  React.useEffect(() => {
+    if (isLoading) {
+      console.log('useEffect isLoading: add');
+      const re = addToast(LoadingToast());
+      return () => {
+        console.log('useEffect isLoading: remove');
+        re();
+      };
+    }
+  }, [addToast, isLoading]);
+
+  React.useEffect(() => {
+    if (isError && error) {
+      return addToast(ErrorToast((error as any).message as string));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addToast, isError]);
+
   if (isError) {
     return <ShowError error={error} />;
   }

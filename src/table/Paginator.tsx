@@ -33,6 +33,7 @@ const Paginator: React.FC<Pick<PaginationControlProps, 'page' | 'total' | 'chang
   console.log('total: ', total);
   console.log('pageSize: ', pageSize);
 */
+  if (total <= 0) return null;
   return (
     <Row {...rowsProps} css={rowStyle}>
       <Col xs="auto">

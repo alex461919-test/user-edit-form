@@ -37,6 +37,7 @@ function GlobalFilter({ globalFilter, setGlobalFilter, total, ...divProps }: Glo
       setGlobalFilter(searchAfter(value) ? value : '');
     });
   };
+  if (total <= 0) return null;
   return (
     <div css={filterStyle} {...divProps}>
       <InputGroup size="sm">
