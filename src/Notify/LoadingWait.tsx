@@ -1,3 +1,4 @@
+import React from 'react';
 import { Spinner, Toast, ToastProps } from 'react-bootstrap';
 
 function LoadingToast() {
@@ -17,7 +18,7 @@ function LoadingToast() {
     );
   };
 }
-function ErrorToast(message: string) {
+function ErrorToast(message: React.ReactNode) {
   return function (props: ToastProps) {
     return (
       <Toast {...props} bg="danger">
@@ -25,7 +26,7 @@ function ErrorToast(message: string) {
           <strong className="me-auto">Ошибка</strong>
         </Toast.Header>
         <Toast.Body>
-          <span className="text-white">{message}</span>
+          <div className="text-white">{message}</div>
         </Toast.Body>
       </Toast>
     );

@@ -4,6 +4,7 @@ import { ToastContainer, ToastProps } from 'react-bootstrap';
 type ToastComponent = React.FunctionComponent<ToastProps>;
 
 const toastContext = React.createContext((p1: ToastComponent) => () => {});
+toastContext.displayName = 'ToastContext';
 
 export const useAddToast = () => React.useContext(toastContext);
 
@@ -36,15 +37,15 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
 type UseMemoSet<T> = Readonly<[Set<T>, { add: (value: T) => Set<T>; remove: (value: T) => boolean }]>;
 
 function useMemoSet<T>(initialValue?: Iterable<T>) {
-  const [, flash] = React.useState(true);
+  const [, flash] = React.useState(0);
   const [memoSet] = React.useState<UseMemoSet<T>>(() => {
     const set = initialValue === undefined ? new Set<T>() : new Set(initialValue);
     const add = (value: T) => {
-      flash(v => !v);
+      flash(Math.random);
       return set.add(value);
     };
     const remove = (value: T) => {
-      flash(v => !v);
+      flash(Math.random);
       return set.delete(value);
     };
 

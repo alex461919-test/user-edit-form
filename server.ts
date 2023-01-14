@@ -3,8 +3,6 @@ import jsonServer from 'json-server';
 import { existsSync, writeFileSync } from 'fs';
 import fakeUsers from './src/data/fakeUsers';
 
-const rewrite = require('express-urlrewrite') as any;
-
 const server = jsonServer.create();
 const middlewares = jsonServer.defaults();
 
@@ -26,21 +24,6 @@ const router = jsonServer.router('fake-db.json');
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
-//server.use(rewrite(/^\/users\/(\w+)\/?$/, '/users/$1?_id=$1'));
-/*
-server.use((req, _, next) => {
-  console.log(req.headers);
-  console.log('path: ', req.path);
-  console.log(req.query);
-  next();
-});
-*/
-/*
-(router as any).render = (req: any, res: any) => {
-  const id = req.query._id;
-  res.jsonp(req.method === 'DELETE' && res.statusCode === 200 && id ? { success: true, id } : res.locals.data);
-};
-*/
 server.use(router);
 
 server.listen(4000, () => {
