@@ -81,20 +81,19 @@ function Table() {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    autoResetPageIndex: true,
   });
 
-  type T10 = { show: true; user: User } | { show: false; user?: undefined };
-
-  const [{ show: editFormShow, user: selectedUser }, setEditFormState] = React.useState<T10>({ show: false });
-  const [addFormShow, setAddFormShowState] = React.useState(false);
+  const [modalEditFormState, setModalEditFormState] = React.useState<{ show: true; user?: User } | { show: false }>({ show: false });
 
   const handleRowClick = (row: Row<User>) => {
-    !editFormShow && setEditFormState({ show: true, user: row.original });
+    !modalEditFormState.show && setModalEditFormState({ show: true, user: row.original });
   };
 
   const handleAddButtonClick = () => {
-    !addFormShow && setAddFormShowState(true);
+    !modalEditFormState.show && setModalEditFormState({ show: true });
   };
+  const hideModalForm = React.useCallback(() => setModalEditFormState({ show: false }), []);
 
   if (isLoading) return <span>Loading ...</span>;
   if (isError) {
@@ -105,21 +104,8 @@ function Table() {
 
   return (
     <>
-      {editFormShow && (
-        <UserEditModalForm
-          user={selectedUser}
-          onClose={() => {
-            setEditFormState({ show: false });
-          }}
-        />
-      )}
-
-      {addFormShow && (
-        <UserEditModalForm
-          onClose={() => {
-            setAddFormShowState(false);
-          }}
-        />
+      {modalEditFormState.show && (
+        <UserEditModalForm {...(modalEditFormState.user ? { user: modalEditFormState.user } : null)} onClose={hideModalForm} />
       )}
 
       <Paginator

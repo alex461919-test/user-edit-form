@@ -32,7 +32,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
     control,
     formState: { errors },
     getValues,
-  } = useForm<User>({ defaultValues: { phone: ' ', ...user } });
+  } = useForm<User>({ defaultValues: { ...user } });
 
   const [error, setError] = React.useState('');
   const [addUser] = useAddUserMutation();
@@ -121,7 +121,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
               control={control}
               rules={{ required: true }}
               render={({ field: fields }) => {
-                const { value, ..._fields } = { ...fields, selected: fields.value ? new Date(fields.value) : null };
+                const { value, ..._fields } = fields;
                 return (
                   <Form.Control
                     as={DatePicker}
@@ -129,6 +129,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
                     type="text"
                     {...(errors.birthdate ? { isInvalid: true } : null)}
                     {..._fields}
+                    selected={value ? new Date(value) : null}
                     locale="ru"
                     dateFormat="dd.MM.yyyy"
                     peekNextMonth
@@ -174,6 +175,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
                   type="text"
                   mask={['+', '3', '8', '0', ' ', '(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]}
                   {...field}
+                  {...(errors.phone ? { isInvalid: true } : null)}
                 />
               )}
             />
