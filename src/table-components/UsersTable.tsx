@@ -13,23 +13,19 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { getHumanViewError } from '../store/helpers';
-import { useGetAllUsersQuery } from '../store';
+import { getHumanViewError } from '../service/helpers';
+import { useGetAllUsersQuery } from '../service/store';
 import { User } from '../types';
 import Avatar from './Avatar';
 import Paginator from './Paginator';
 import GlobalFilter from './GlobalFilter';
 import UserEditModalForm from './EditForm';
-import { useAddToast } from '../Notify/toasts';
-import { ErrorToast, LoadingToast } from '../Notify/LoadingWait';
+import { useAddToast } from '../notify/toast-control';
+import { ErrorToast, LoadingToast } from '../notify/toastSet';
 
 const columnHelper = createColumnHelper<User>();
 
 const columns = [
-  columnHelper.accessor('id', {
-    header: 'Id',
-    enableGlobalFilter: false,
-  }),
   columnHelper.accessor('avatar', {
     header: '',
     cell: props => Avatar(props.getValue()),
@@ -38,7 +34,7 @@ const columns = [
   }),
   columnHelper.accessor(row => `${row.lastName} ${row.firstName}`, {
     id: 'fullName',
-    header: 'Полное имя',
+    header: 'Имя',
   }),
   columnHelper.accessor('email', {
     header: 'Email',
@@ -63,7 +59,7 @@ const tableStyle = css`
 
 const pageSizeSet = [10, 20, 30, 40, 50];
 
-function Table() {
+function UsersTable() {
   const { data = [], isLoading, isError, error } = useGetAllUsersQuery();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -196,4 +192,4 @@ function Table() {
   );
 }
 
-export default Table;
+export default UsersTable;

@@ -1,46 +1,24 @@
-# Getting Started with Create React App
+# Практическое задание
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Необходимо сделать мини проект - список пользователей с формой создания / редактирования пользователя:
 
-## Available Scripts
+Для стилизации используйте Bootstrap.
+Минимальный набор полей пользователя:
+имя;
+фамилия;
+электронная почта;
+телефон (в формате +380 (XX) XXX-XX-XX)
+дата рождения;
+будет плюсом - добавление аватара и возможность crop-картинки.
+Пользователи должны иметь возможность фильтрации и пагинацию.
+Проект должен содержать README-файл с шагами для запуска.
 
-In the project directory, you can run:
+## Сборка, запуск
 
-### `npm start`
+В качестве бэкенда используется [json-server](https://github.com/typicode/json-server). При старте, cервер проверяет наличие файла `fake-db.json`. Если есть, загружает данные из него. Если отсутствует, создает его и заполняет фейковыми данными. Этот файл можно специально удалить для генерации новых фейковых данных.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Для старта проекта необходимо в одном терминальном окне запусть бэкенд `npm run json-server`, а другом само react приложение `npm run start`.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Или запустить один скрипт `npm run dev`. Но тут могут быть проблемы, т.к. react должен стартовать уже при работающем бакенде. Я там прописал задержку в 5 сек., но может и не сработать.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Аватарки находятся на https://cloudflare-ipfs.com. Какие то проблемы с ним иногда случаются, отвечает ошибкой 429 Too Many Requests.

@@ -30,7 +30,7 @@ export const userApi = createApi({
 
     updateUser: build.mutation<User, Pick<User, 'id'> & Partial<User>>({
       query: ({ id, ...patch }) => ({
-        url: `users1/${id}`,
+        url: `users/${id}`,
         method: 'PUT',
         body: patch,
       }),

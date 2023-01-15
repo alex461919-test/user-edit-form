@@ -1,10 +1,10 @@
 import { Container } from 'react-bootstrap';
-import Table from './table/UsersTable';
+import UsersTable from './table-components/UsersTable';
 
 function App() {
   return (
     <Container className="my-4">
-      <Table />
+      <UsersTable />
     </Container>
   );
 }

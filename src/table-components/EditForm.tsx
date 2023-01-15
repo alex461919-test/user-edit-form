@@ -4,12 +4,12 @@ import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import MaskedInput from 'react-text-mask';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from '../store';
+import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from '../service/store';
 import { User } from '../types';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
-import { getHumanViewError } from '../store/helpers';
+import { getHumanViewError } from '../service/helpers';
 
 registerLocale('ru', ru);
 

@@ -36,6 +36,8 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
 
 type UseMemoSet<T> = Readonly<[Set<T>, { add: (value: T) => Set<T>; remove: (value: T) => boolean }]>;
 
+// !!!Объект Set остается всегда тем же самым, но мутабельным. Изменения происходят "на месте"
+// Это что бы не менялись методы доступа(add,remove) после каждой мутации, как это обычно реализуют в хуках useSet.
 function useMemoSet<T>(initialValue?: Iterable<T>) {
   const [, flash] = React.useState(0);
   const [memoSet] = React.useState<UseMemoSet<T>>(() => {
@@ -49,7 +51,7 @@ function useMemoSet<T>(initialValue?: Iterable<T>) {
       return set.delete(value);
     };
 
-    return [set, { add, remove }];
+    return [set, { add, remove }] as const;
   });
   return memoSet;
 }

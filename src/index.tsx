@@ -4,9 +4,9 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { setupStore } from './store';
+import { setupStore } from './service/store';
 import { Provider } from 'react-redux';
-import { ToastProvider } from './Notify/toasts';
+import { ToastProvider } from './notify/toast-control';
 
 const store = setupStore();
 
