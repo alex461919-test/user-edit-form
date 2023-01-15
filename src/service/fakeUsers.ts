@@ -6,7 +6,7 @@ faker.setLocale('ru');
 const fakeUsers = (itemCount: number = 50) =>
   Array.from<never, User>({ length: itemCount }, (_, index) => {
     const sex = faker.name.sexType();
-    const avatar = faker.helpers.maybe(() => faker.image.people(480, 480, true), { probability: 0.7 });
+    const avatar = faker.helpers.maybe(() => faker.image.people(100, 100, true), { probability: 0.7 });
 
     return {
       id: (index + 1).toString(),
