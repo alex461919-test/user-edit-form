@@ -9,6 +9,7 @@ import { User } from '../types';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
+import { getHumanViewError } from '../store/helpers';
 
 registerLocale('ru', ru);
 
@@ -34,7 +35,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
     getValues,
   } = useForm<User>({ defaultValues: { ...user } });
 
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState<React.ReactNode>('');
   const [addUser] = useAddUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
@@ -45,8 +46,8 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
     (userId ? updateUser(data) : addUser(data))
       .unwrap()
       .then(onClose)
-      .catch(error => {
-        setError(error.message);
+      .catch(e => {
+        setError(getHumanViewError(e));
       });
   };
 
@@ -54,8 +55,8 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
     deleteUser(userId)
       .unwrap()
       .then(onClose)
-      .catch(error => {
-        setError(error.message);
+      .catch(e => {
+        setError(getHumanViewError(e));
       });
   };
 
@@ -202,14 +203,3 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
 }
 
 export default UserEditModalForm;
-
-/*
-
-          <DatePicker
-            selected={startDate}
-            onChange={date => {
-              console.log(date);
-              setStartDate(date);
-            }}
-          />
-*/

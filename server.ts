@@ -1,7 +1,7 @@
 import jsonServer from 'json-server';
-
 import { existsSync, writeFileSync } from 'fs';
 import fakeUsers from './src/data/fakeUsers';
+import { getReasonPhrase } from 'http-status-codes';
 
 const server = jsonServer.create();
 const middlewares = jsonServer.defaults();
@@ -23,6 +23,10 @@ const router = jsonServer.router('fake-db.json');
 
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
+
+(router as any).render = (req: any, res: any) => {
+  res.jsonp(JSON.stringify(res.locals.data) === '{}' && res.statusCode >= 400 ? { error: getReasonPhrase(res.statusCode) } : res.locals.data);
+};
 
 server.use(router);
 

@@ -8,7 +8,6 @@ export const userApi = createApi({
     //
     getAllUsers: build.query<User[], void>({
       query: () => 'users',
-
       providesTags: result =>
         result //
           ? [...result.map(({ id }) => ({ type: 'User' as const, id })), { type: 'User', id: 'LIST' }]
@@ -26,22 +25,14 @@ export const userApi = createApi({
         method: 'POST',
         body,
       }),
-      transformErrorResponse: (response, meta, arg) => ({
-        ...response,
-        message: `Ошибка создания нового пользавателя. Status: ${response.status}`,
-      }),
       invalidatesTags: [{ type: 'User', id: 'LIST' }],
     }),
 
     updateUser: build.mutation<User, Pick<User, 'id'> & Partial<User>>({
       query: ({ id, ...patch }) => ({
-        url: `users/${id}`,
+        url: `users1/${id}`,
         method: 'PUT',
         body: patch,
-      }),
-      transformErrorResponse: (response, meta, arg) => ({
-        ...response,
-        message: `Ошибка изменения данных пользавателя. Status: ${response.status}`,
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'User', id }],
     }),
@@ -51,7 +42,6 @@ export const userApi = createApi({
         url: `users/${id}`,
         method: 'DELETE',
       }),
-      transformErrorResponse: (response, meta, arg) => ({ ...response, message: `Ошибка удаления пользавателя. Status: ${response.status}` }),
       invalidatesTags: (result, error, id) => [{ type: 'User', id }],
     }),
   }),

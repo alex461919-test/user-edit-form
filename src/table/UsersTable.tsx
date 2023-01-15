@@ -19,7 +19,6 @@ import { User } from '../types';
 import Avatar from './Avatar';
 import Paginator from './Paginator';
 import GlobalFilter from './GlobalFilter';
-import ShowError from './ShowError';
 import UserEditModalForm from './EditForm';
 import { useAddToast } from '../Notify/toasts';
 import { ErrorToast, LoadingToast } from '../Notify/LoadingWait';
@@ -112,10 +111,6 @@ function Table() {
     }
   }, [addToast, isError, error]);
 
-  if (isError) {
-    return <ShowError error={error} />;
-  }
-
   const rowsCount = table.getFilteredRowModel().rows.length;
 
   return (
@@ -124,14 +119,14 @@ function Table() {
         <UserEditModalForm {...(modalEditFormState.user ? { user: modalEditFormState.user } : null)} onClose={hideModalForm} />
       )}
 
-      <RBSRow className="align-items-center my-4">
-        <RBSCol xs="auto">
+      <RBSRow className="align-items-center my-3">
+        <RBSCol xs="auto" className="my-2 me-auto">
           <Button variant="primary" size="sm" onClick={handleAddButtonClick}>
             <i className="bi bi-person-plus me-3"></i>
             Новый пользователь
           </Button>
         </RBSCol>
-        <RBSCol xs="auto" className="ms-auto">
+        <RBSCol xs="auto" className="my-2">
           <Paginator
             page={table.getState().pagination.pageIndex + 1}
             total={rowsCount}
@@ -142,7 +137,7 @@ function Table() {
             className="justify-content-start "
           />
         </RBSCol>
-        <RBSCol xs="auto">
+        <RBSCol xs="auto" className="my-2">
           <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} total={rowsCount} className="w1-50" />
         </RBSCol>
       </RBSRow>
