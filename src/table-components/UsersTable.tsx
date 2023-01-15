@@ -55,6 +55,9 @@ const tableStyle = css`
       color: var(--bs-gray-500);
     }
   }
+  tbody td {
+    vertical-align: middle;
+  }
 `;
 
 const pageSizeSet = [10, 20, 30, 40, 50];

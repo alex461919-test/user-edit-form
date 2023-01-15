@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Image } from 'react-bootstrap';
 
 const StyledSpan = styled.span`
-  --avatar-size: 2rem;
+  --avatar-size: 2.5rem;
   .img-avatar {
     width: var(--avatar-size);
     height: var(--avatar-size);
