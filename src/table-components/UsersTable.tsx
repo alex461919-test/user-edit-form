@@ -83,6 +83,7 @@ function UsersTable() {
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     autoResetPageIndex: true,
+    getRowId: originalRow => originalRow.id,
   });
 
   const [modalEditFormState, setModalEditFormState] = React.useState<{ show: true; user?: User } | { show: false }>({ show: false });
@@ -102,13 +103,15 @@ function UsersTable() {
     if (isLoading) {
       return addToast(LoadingToast());
     }
-  }, [addToast, isLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   React.useEffect(() => {
     if (isError && error) {
       return addToast(ErrorToast(getHumanViewError(error)));
     }
-  }, [addToast, isError, error]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError]);
 
   const rowsCount = table.getFilteredRowModel().rows.length;
 

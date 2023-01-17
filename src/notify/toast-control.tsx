@@ -15,9 +15,8 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
   const addToast = React.useCallback(
     (component: ToastComponent) => {
       const toastItem = { Component: component, key: Math.random(), remove: () => {} };
-      toastItem.remove = () => remove(toastItem);
       add(toastItem);
-      return toastItem.remove;
+      return (toastItem.remove = () => remove(toastItem));
     },
     [add, remove],
   );
@@ -40,7 +39,7 @@ type UseMemoSet<T> = Readonly<[Set<T>, { add: (value: T) => Set<T>; remove: (val
 // Это что бы не менялись методы доступа(add,remove) после каждой мутации, как это обычно реализуют в хуках useSet.
 function useMemoSet<T>(initialValue?: Iterable<T>) {
   const [, flash] = React.useState(0);
-  const [memoSet] = React.useState<UseMemoSet<T>>(() => {
+  return React.useMemo<UseMemoSet<T>>(() => {
     const set = initialValue === undefined ? new Set<T>() : new Set(initialValue);
     const add = (value: T) => {
       flash(Math.random);
@@ -52,6 +51,6 @@ function useMemoSet<T>(initialValue?: Iterable<T>) {
     };
 
     return [set, { add, remove }] as const;
-  });
-  return memoSet;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }
