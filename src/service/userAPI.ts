@@ -1,8 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '../types';
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const userApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4000/' }),
+  baseQuery: async (...args) => {
+    await sleep(1000);
+    return fetchBaseQuery({ baseUrl: 'http://localhost:4000/' })(...args);
+  },
   tagTypes: ['User'],
   endpoints: build => ({
     //

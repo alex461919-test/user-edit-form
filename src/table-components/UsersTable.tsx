@@ -17,11 +17,12 @@ import { getHumanViewError } from '../service/helpers';
 import { useGetAllUsersQuery } from '../service/store';
 import { User } from '../types';
 import Avatar from './Avatar';
-import Paginator from './Paginator';
 import GlobalFilter from './GlobalFilter';
 import UserEditModalForm from './EditForm';
 import { useAddToast } from '../notify/toast-control';
 import { ErrorToast, LoadingToast } from '../notify/toastSet';
+import AppPagination from './Pagination';
+import PageSizeControl from './PageSizeControl';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -63,7 +64,7 @@ const tableStyle = css`
 const pageSizeSet = [10, 20, 30, 40, 50];
 
 function UsersTable() {
-  const { data = [], isLoading, isError, error } = useGetAllUsersQuery();
+  const { data = [], isLoading, isError, error, isFetching } = useGetAllUsersQuery();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -114,6 +115,12 @@ function UsersTable() {
   }, [isError]);
 
   const rowsCount = table.getFilteredRowModel().rows.length;
+  /*
+
+*/
+  const currentPage = table.getState().pagination.pageIndex + 1;
+  const pageSize = table.getState().pagination.pageSize;
+  const totalPages = Math.ceil(rowsCount / pageSize);
 
   return (
     <>
@@ -129,15 +136,22 @@ function UsersTable() {
           </Button>
         </RBSCol>
         <RBSCol xs="auto" className="my-2">
-          <Paginator
-            page={table.getState().pagination.pageIndex + 1}
-            total={rowsCount}
-            changePage={page => table.setPageIndex(page - 1)}
-            pageSize={table.getState().pagination.pageSize}
-            setPageSize={table.setPageSize}
-            pageSizeSet={pageSizeSet}
-            className="justify-content-start "
-          />
+          {totalPages > 1 ? (
+            <div className="d-flex align-items-center">
+              <AppPagination
+                {...{
+                  totalCount: rowsCount,
+                  pageSize,
+                  siblingCount: 2,
+                  currentPage,
+                  onChangePage: page => table.setPageIndex(page - 1),
+                  disabled: isFetching,
+                }}
+                className="my-3 me-4"
+              />
+              <PageSizeControl onChangePageSize={table.setPageSize} currentPageSize={pageSize} pageSizeSet={pageSizeSet} />
+            </div>
+          ) : null}
         </RBSCol>
         <RBSCol xs="auto" className="my-2">
           <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} total={rowsCount} className="w1-50" />
