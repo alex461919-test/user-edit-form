@@ -23,7 +23,7 @@ import { useAddToast } from '../notify/toast-control';
 import { ErrorToast, LoadingToast } from '../notify/toastSet';
 import AppPagination from './Pagination';
 import PageSizeControl from './PageSizeControl';
-import { ArrowDownUpIcon, SortDownIcon, SortUpIcon } from './Icons';
+import { ArrowDownUpIcon, PersonPlusIcon, SortDownIcon, SortUpIcon } from './Icons';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -126,7 +126,7 @@ function UsersTable() {
       <Row className="align-items-center my-3">
         <Col xs="auto" className="my-2 me-auto">
           <Button variant="primary" size="sm" onClick={handleAddButtonClick}>
-            <i className="bi bi-person-plus me-3"></i>
+            <PersonPlusIcon className="me-3" color="white" />
             Новый пользователь
           </Button>
         </Col>
