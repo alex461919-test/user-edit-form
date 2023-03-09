@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Image } from 'react-bootstrap';
-import { PersonIcon } from './Icons';
+import Icon from './Icons';
 
 const AVATAR_SIZE = '2.5rem';
 const StyledSpan = styled.span`
@@ -22,7 +22,7 @@ function Avatar(source: string | undefined) {
       {source ? (
         <Image src={source} className="img-avatar" roundedCircle />
       ) : (
-        <PersonIcon className="ico-avatar" size={AVATAR_SIZE} color="var(--bs-gray-500)" />
+        <Icon.Person className="ico-avatar" size={AVATAR_SIZE} color="var(--bs-gray-500)" />
       )}
     </StyledSpan>
   );

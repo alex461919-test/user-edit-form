@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
-import { SearchIcon } from './Icons';
+import Icon from './Icons';
 
 const filterStyle = css`
   position: relative;
@@ -49,7 +49,7 @@ function GlobalFilter({ globalFilter, setGlobalFilter, total, ...divProps }: Glo
       <InputGroup size="sm">
         <Form.Control placeholder="Найти ..." value={inputValue} onChange={handleChange} />
         <InputGroup.Text>
-          <SearchIcon />
+          <Icon.Search />
         </InputGroup.Text>
       </InputGroup>
       {searchAfter(inputValue) ? <span className="found-counter">Найдено: {total}</span> : null}

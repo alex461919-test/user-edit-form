@@ -23,7 +23,7 @@ import { useAddToast } from '../notify/toast-control';
 import { ErrorToast, LoadingToast } from '../notify/toastSet';
 import AppPagination from './Pagination';
 import PageSizeControl from './PageSizeControl';
-import { ArrowDownUpIcon, PersonPlusIcon, SortDownIcon, SortUpIcon } from './Icons';
+import Icon from './Icons';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -126,7 +126,7 @@ function UsersTable() {
       <Row className="align-items-center my-3">
         <Col xs="auto" className="my-2 me-auto">
           <Button variant="primary" size="sm" onClick={handleAddButtonClick}>
-            <PersonPlusIcon className="me-3" color="white" />
+            <Icon.Plus className="me-2" color="white" size="1.25rem" />
             Новый пользователь
           </Button>
         </Col>
@@ -169,9 +169,9 @@ function UsersTable() {
                         }}>
                         {header.column.getCanSort()
                           ? {
-                              asc: <SortUpIcon size="1.25rem" />,
-                              desc: <SortDownIcon size="1.25rem" />,
-                            }[header.column.getIsSorted() as string] ?? <ArrowDownUpIcon color="var(--bs-gray-600)" />
+                              asc: <Icon.SortUp size="1.25rem" />,
+                              desc: <Icon.SortDown size="1.25rem" />,
+                            }[header.column.getIsSorted() as string] ?? <Icon.ArrowDownUp color="var(--bs-gray-600)" />
                           : null}
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </div>
