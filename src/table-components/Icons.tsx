@@ -1,4 +1,3 @@
-import { current } from '@reduxjs/toolkit';
 import React, { SVGAttributes } from 'react';
 
 interface IconProps extends SVGAttributes<SVGElement> {
