@@ -1,10 +1,16 @@
+import { current } from '@reduxjs/toolkit';
 import React, { SVGAttributes } from 'react';
 
 interface IconProps extends SVGAttributes<SVGElement> {
   color?: string;
   size?: string | number;
 }
+
 type IconNames = keyof typeof iconPaths;
+
+type IconSet = {
+  [key in IconNames]: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+};
 
 const iconPaths = {
   ArrowDownUp: (
@@ -43,16 +49,14 @@ const iconPaths = {
   ),
 };
 
-const Icon: { [key in IconNames]: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>> } = Object.create(null);
-
-Object.entries(iconPaths).forEach(item => {
-  Icon[item[0] as IconNames] = React.forwardRef<SVGSVGElement, IconProps>(({ color, size = '1rem', ...rest }, ref) => {
-    return (
-      <svg ref={ref} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width={size} height={size} fill={color} {...rest}>
-        {item[1]}
-      </svg>
-    );
-  });
-});
-
-export default Icon;
+export default Object.entries(iconPaths).reduce(
+  (prev, current) =>
+    Object.assign(prev, {
+      [current[0] as IconNames]: React.forwardRef<SVGSVGElement, IconProps>(({ color, size = '1rem', ...rest }, ref) => (
+        <svg ref={ref} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width={size} height={size} fill={color} {...rest}>
+          {current[1]}
+        </svg>
+      )),
+    }),
+  Object.create(null) as IconSet,
+);
