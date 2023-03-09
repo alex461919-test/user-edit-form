@@ -1,14 +1,12 @@
-import React, { SVGAttributes } from 'react';
+import React from 'react';
 
-interface IconProps extends SVGAttributes<SVGElement> {
+interface IconProps extends React.SVGAttributes<SVGElement> {
   color?: string;
   size?: string | number;
 }
 
-type IconNames = keyof typeof iconPaths;
-
 type IconSet = {
-  [key in IconNames]: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+  [key in keyof typeof iconPaths]: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
 };
 
 const iconPaths = {
@@ -51,7 +49,7 @@ const iconPaths = {
 export default Object.entries(iconPaths).reduce(
   (prev, current) =>
     Object.assign(prev, {
-      [current[0] as IconNames]: React.forwardRef<SVGSVGElement, IconProps>(({ color, size = '1rem', ...rest }, ref) => (
+      [current[0] as keyof IconSet]: React.forwardRef<SVGSVGElement, IconProps>(({ color, size = '1rem', ...rest }, ref) => (
         <svg ref={ref} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width={size} height={size} fill={color} {...rest}>
           {current[1]}
         </svg>
