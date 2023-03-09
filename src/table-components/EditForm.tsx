@@ -39,13 +39,14 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
   const [addUser] = useAddUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
+  const [show, setShow] = React.useState(true);
 
   const userId = getValues().id;
 
   const handleSave: SubmitHandler<User> = data => {
     (userId ? updateUser(data) : addUser(data))
       .unwrap()
-      .then(onClose)
+      .then(handleHide)
       .catch(e => {
         setError(getHumanViewError(e));
       });
@@ -54,14 +55,19 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
   const handleDelete = () => {
     deleteUser(userId)
       .unwrap()
-      .then(onClose)
+      .then(handleHide)
       .catch(e => {
         setError(getHumanViewError(e));
       });
   };
 
+  const handleHide = React.useCallback(() => {
+    setShow(false);
+    setTimeout(() => onClose(), 200);
+  }, [onClose]);
+
   return (
-    <Modal show onHide={onClose} backdrop="static" keyboard={false} centered>
+    <Modal show={show} onHide={handleHide} backdrop="static" keyboard={false} centered>
       <Modal.Header closeButton>
         <Modal.Title>{userId ? 'Редактирование пользователя' : 'Новый пользователь'}</Modal.Title>
       </Modal.Header>
@@ -186,7 +192,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
 
       <Modal.Footer>
         {error ? <div className="text-danger w-100 text-end mb-2">{error}</div> : null}
-        <Button size="sm" variant="secondary" type="button" onClick={onClose}>
+        <Button size="sm" variant="secondary" type="button" onClick={handleHide}>
           Отмена
         </Button>
         {userId ? (
