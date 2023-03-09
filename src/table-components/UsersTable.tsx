@@ -23,6 +23,7 @@ import { useAddToast } from '../notify/toast-control';
 import { ErrorToast, LoadingToast } from '../notify/toastSet';
 import AppPagination from './Pagination';
 import PageSizeControl from './PageSizeControl';
+import { ArrowDownUp, SortDown, SortUp } from '../service/Icons';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -46,15 +47,9 @@ const columns = [
 ];
 
 const tableStyle = css`
-  thead .bi {
+  thead svg {
     line-height: 1;
     margin-right: 0.5rem;
-    &.increase {
-      font-size: 1.25rem;
-    }
-    &.color-gray {
-      color: var(--bs-gray-500);
-    }
   }
   tbody td {
     vertical-align: middle;
@@ -174,9 +169,9 @@ function UsersTable() {
                         }}>
                         {header.column.getCanSort()
                           ? {
-                              asc: <i className="bi bi-sort-up increase"></i>,
-                              desc: <i className="bi bi-sort-down increase"></i>,
-                            }[header.column.getIsSorted() as string] ?? <i className="bi bi-arrow-down-up color-gray"></i>
+                              asc: <SortUp size="1.25rem" />,
+                              desc: <SortDown size="1.25rem" />,
+                            }[header.column.getIsSorted() as string] ?? <ArrowDownUp color="var(--bs-gray-600)" />
                           : null}
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </div>
