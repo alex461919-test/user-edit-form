@@ -23,7 +23,7 @@ import { useAddToast } from '../notify/toast-control';
 import { ErrorToast, LoadingToast } from '../notify/toastSet';
 import AppPagination from './Pagination';
 import PageSizeControl from './PageSizeControl';
-import { ArrowDownUp, SortDown, SortUp } from './Icons';
+import { ArrowDownUpIcon, SortDownIcon, SortUpIcon } from './Icons';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -169,9 +169,9 @@ function UsersTable() {
                         }}>
                         {header.column.getCanSort()
                           ? {
-                              asc: <SortUp size="1.25rem" />,
-                              desc: <SortDown size="1.25rem" />,
-                            }[header.column.getIsSorted() as string] ?? <ArrowDownUp color="var(--bs-gray-600)" />
+                              asc: <SortUpIcon size="1.25rem" />,
+                              desc: <SortDownIcon size="1.25rem" />,
+                            }[header.column.getIsSorted() as string] ?? <ArrowDownUpIcon color="var(--bs-gray-600)" />
                           : null}
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </div>

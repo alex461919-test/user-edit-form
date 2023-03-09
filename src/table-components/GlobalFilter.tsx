@@ -2,6 +2,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
+import { SearchIcon } from './Icons';
 
 const filterStyle = css`
   position: relative;
@@ -29,27 +30,26 @@ function GlobalFilter({ globalFilter, setGlobalFilter, total, ...divProps }: Glo
   const [inputValue, setInputValue] = React.useState(globalFilter || '');
   const [, startTransition] = React.useTransition();
 
+  // Начинаем поиск после ввода xxx символов. Пока 0
   const searchAfter = (v: string) => v.length > 0;
 
-  const handleChange = (value: string) => {
-    setInputValue(value);
-    startTransition(() => {
-      setGlobalFilter(searchAfter(value) ? value : '');
-    });
-  };
-  //if (total <= 0) return null;
+  const handleChange = React.useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    event => {
+      const value = event.target.value;
+      setInputValue(value);
+      startTransition(() => {
+        setGlobalFilter(searchAfter(value) ? value : '');
+      });
+    },
+    [setGlobalFilter],
+  );
+
   return (
     <div css={filterStyle} {...divProps}>
       <InputGroup size="sm">
-        <Form.Control
-          placeholder="Найти ..."
-          value={inputValue}
-          onChange={e => {
-            handleChange(e.target.value);
-          }}
-        />
+        <Form.Control placeholder="Найти ..." value={inputValue} onChange={handleChange} />
         <InputGroup.Text>
-          <i className="bi bi-search"></i>
+          <SearchIcon />
         </InputGroup.Text>
       </InputGroup>
       {searchAfter(inputValue) ? <span className="found-counter">Найдено: {total}</span> : null}

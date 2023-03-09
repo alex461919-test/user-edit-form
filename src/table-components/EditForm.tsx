@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import MaskedInput from 'react-text-mask';
+import MaskedInput, { MaskedInputProps } from 'react-text-mask';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from '../service/store';
 import { User } from '../types';
@@ -168,10 +168,10 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
             <Controller
               name="phone"
               control={control}
-              rules={{ required: true }}
+              rules={{ required: true, pattern: /^\+380 \(\d\d\) \d\d\d-\d\d-\d\d$/ }}
               render={({ field }) => (
                 <Form.Control
-                  as={MaskedInput}
+                  as={PhoneMaskedInput}
                   size="sm"
                   type="text"
                   mask={['+', '3', '8', '0', ' ', '(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/]}
@@ -201,5 +201,35 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
     </Modal>
   );
 }
+
+const PhoneMaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>((PhoneMaskedInputProps, ref) => {
+  const assignRef = React.useCallback(
+    (element: HTMLInputElement | null) => {
+      if (typeof ref === 'function') ref(element);
+      if (ref !== null && typeof ref === 'object') ref.current = element;
+    },
+    [ref],
+  );
+  React.useEffect(() => () => assignRef(null), [assignRef]);
+
+  return (
+    <MaskedInput
+      {...PhoneMaskedInputProps}
+      render={(textMaskRef, props) => {
+        return (
+          <input
+            {...props}
+            ref={node => {
+              if (node) {
+                textMaskRef(node);
+                assignRef(node);
+              }
+            }}
+          />
+        );
+      }}
+    />
+  );
+});
 
 export default UserEditModalForm;
