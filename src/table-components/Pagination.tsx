@@ -31,7 +31,7 @@ const AppPagination: React.FC<
         {pagination.map(item => {
           return (
             <Pagination.Item key={item.pageN} active={item.pageN === currentPage} disabled={disabled} data-page={item.pageN}>
-              {item.type === 'dots' ? '...' : item.pageN}
+              {{ dots: '...', page: item.pageN }[item.type] ?? (item.pageN as never)}
             </Pagination.Item>
           );
         })}

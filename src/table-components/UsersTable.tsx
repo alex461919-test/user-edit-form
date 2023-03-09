@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { css } from '@emotion/react';
-import { Button, Table as RBSTable, Row as RBSRow, Col as RBSCol } from 'react-bootstrap';
+import { Button, Table, Row, Col } from 'react-bootstrap';
 import {
   createColumnHelper,
   flexRender,
@@ -9,7 +9,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Row,
+  Row as TableRow,
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
@@ -23,7 +23,7 @@ import { useAddToast } from '../notify/toast-control';
 import { ErrorToast, LoadingToast } from '../notify/toastSet';
 import AppPagination from './Pagination';
 import PageSizeControl from './PageSizeControl';
-import { ArrowDownUp, SortDown, SortUp } from '../service/Icons';
+import { ArrowDownUp, SortDown, SortUp } from './Icons';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -84,7 +84,7 @@ function UsersTable() {
 
   const [modalEditFormState, setModalEditFormState] = React.useState<{ show: true; user?: User } | { show: false }>({ show: false });
 
-  const handleRowClick = (row: Row<User>) => {
+  const handleRowClick = (row: TableRow<User>) => {
     !modalEditFormState.show && setModalEditFormState({ show: true, user: row.original });
   };
 
@@ -123,14 +123,14 @@ function UsersTable() {
         <UserEditModalForm {...(modalEditFormState.user ? { user: modalEditFormState.user } : null)} onClose={hideModalForm} />
       )}
 
-      <RBSRow className="align-items-center my-3">
-        <RBSCol xs="auto" className="my-2 me-auto">
+      <Row className="align-items-center my-3">
+        <Col xs="auto" className="my-2 me-auto">
           <Button variant="primary" size="sm" onClick={handleAddButtonClick}>
             <i className="bi bi-person-plus me-3"></i>
             Новый пользователь
           </Button>
-        </RBSCol>
-        <RBSCol xs="auto" className="my-2">
+        </Col>
+        <Col xs="auto" className="my-2">
           {totalPages > 1 ? (
             <div className="d-flex align-items-center">
               <AppPagination
@@ -147,13 +147,13 @@ function UsersTable() {
               <PageSizeControl onChangePageSize={table.setPageSize} currentPageSize={pageSize} pageSizeSet={pageSizeSet} />
             </div>
           ) : null}
-        </RBSCol>
-        <RBSCol xs="auto" className="my-2">
+        </Col>
+        <Col xs="auto" className="my-2">
           <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} total={rowsCount} className="w1-50" />
-        </RBSCol>
-      </RBSRow>
+        </Col>
+      </Row>
 
-      <RBSTable responsive hover borderless css={tableStyle}>
+      <Table responsive hover borderless css={tableStyle}>
         <thead className="table-secondary">
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
@@ -202,7 +202,7 @@ function UsersTable() {
             </tr>
           ))}
         </tfoot>
-      </RBSTable>
+      </Table>
     </>
   );
 }
