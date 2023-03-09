@@ -4,7 +4,6 @@ import { PersonIcon } from './Icons';
 
 const AVATAR_SIZE = '2.5rem';
 const StyledSpan = styled.span`
-  --avatar-size: 2.5rem;
   .img-avatar {
     width: ${AVATAR_SIZE};
     height: ${AVATAR_SIZE};
