@@ -60,6 +60,7 @@ const emptyData: User[] = [];
 const pageSizeSet = [10, 20, 30, 40, 50];
 
 function UsersTable() {
+  console.log('render table');
   const { data = emptyData, isLoading, isError, error, isFetching } = useGetAllUsersQuery();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
