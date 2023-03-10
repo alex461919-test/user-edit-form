@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, FormGroupProps } from 'react-bootstrap';
-import { Controller, UseFormReturn } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 import { User } from '../../types';
 
 const FirstNameField: React.FC<FormGroupProps & { formHook: UseFormReturn<User, any> }> = ({ formHook, ...formGroupProps }) => {
