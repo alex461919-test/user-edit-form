@@ -54,3 +54,62 @@ function useMemoSet<T>(initialValue?: Iterable<T>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
+
+const NotifyContext = React.createContext<(arg: React.ReactNode) => () => void>(() => () => {});
+toastContext.displayName = 'NotifyContext';
+/*
+export const NotifyProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { set, show } = useToastControl<React.ReactNode>();
+  return (
+    <>
+      <NotifyContext.Provider value={show}>{children}</NotifyContext.Provider>
+      <ToastContainer position="top-end" className="p-3">
+        {Array.from(set).map(({ Component, key, remove }) => (
+          <Component key={key} onClose={remove} />
+        ))}
+      </ToastContainer>
+    </>
+  );
+};
+*/
+function useToastControl<T>() {
+  const [set, { add, remove }] = useSet<T>();
+  const show = React.useCallback(
+    (toast: T) => {
+      add(toast);
+      return () => remove(toast);
+    },
+    [add, remove],
+  );
+  return { set, show };
+}
+
+export interface StableActions<K> {
+  add: (key: K) => void;
+  remove: (key: K) => void;
+  toggle: (key: K) => void;
+  reset: () => void;
+}
+
+export interface Actions<K> extends StableActions<K> {
+  has: (key: K) => boolean;
+}
+
+function useSet<K>(initialSet = new Set<K>()): [Set<K>, Actions<K>] {
+  const [set, setSet] = React.useState(initialSet);
+
+  const stableActions = React.useMemo<StableActions<K>>(() => {
+    const add = (item: K) => setSet(prevSet => new Set([...Array.from(prevSet), item]));
+    const remove = (item: K) => setSet(prevSet => new Set(Array.from(prevSet).filter(i => i !== item)));
+    const toggle = (item: K) =>
+      setSet(prevSet => (prevSet.has(item) ? new Set(Array.from(prevSet).filter(i => i !== item)) : new Set([...Array.from(prevSet), item])));
+    return { add, remove, toggle, reset: () => setSet(initialSet) };
+  }, [initialSet]);
+
+  const utils = {
+    has: React.useCallback(item => set.has(item), [set]),
+    ...stableActions,
+  } as Actions<K>;
+
+  return [set, utils];
+}
