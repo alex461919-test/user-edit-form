@@ -3,10 +3,12 @@ import { User } from '../types';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PROD_BACKEND_URL : process.env.REACT_APP_DEV_BACKEND_URL;
+
 export const userApi = createApi({
   baseQuery: async (...args) => {
     await sleep(1000);
-    return fetchBaseQuery({ baseUrl: 'http://localhost:4000/' })(...args);
+    return fetchBaseQuery({ baseUrl })(...args);
   },
   tagTypes: ['User'],
   endpoints: build => ({
