@@ -55,11 +55,12 @@ const tableStyle = css`
     vertical-align: middle;
   }
 `;
+const emptyData: User[] = [];
 
 const pageSizeSet = [10, 20, 30, 40, 50];
 
 function UsersTable() {
-  const { data = [], isLoading, isError, error, isFetching } = useGetAllUsersQuery();
+  const { data = emptyData, isLoading, isError, error, isFetching } = useGetAllUsersQuery();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
