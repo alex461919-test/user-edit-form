@@ -13,7 +13,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { getHumanViewError } from '../service/helpers';
+import { emptyArray, getHumanViewError } from '../service/helpers';
 import { useGetAllUsersQuery } from '../service/store';
 import { User } from '../types';
 import Avatar from './Avatar';
@@ -55,13 +55,11 @@ const tableStyle = css`
     vertical-align: middle;
   }
 `;
-const emptyData: User[] = [];
 
 const pageSizeSet = [10, 20, 30, 40, 50];
 
 function UsersTable() {
-  console.log('render table');
-  const { data = emptyData, isLoading, isError, error, isFetching } = useGetAllUsersQuery();
+  const { data = emptyArray, isLoading, isError, error, isFetching } = useGetAllUsersQuery();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
 

@@ -20,3 +20,4 @@ export function getHumanViewError(error: unknown): React.ReactNode {
   }
   return React.createElement('pre', { children: JSON.stringify(error, null, 2) });
 }
+export const emptyArray: any[] = [];
