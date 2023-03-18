@@ -11,6 +11,7 @@ import { ToastProvider } from './notify/toast-control';
 const store = setupStore();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+console.dir(root);
 root.render(
   <React.StrictMode>
     <ToastProvider>
