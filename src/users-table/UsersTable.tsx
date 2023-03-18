@@ -18,7 +18,7 @@ import { useGetAllUsersQuery } from '../service/store';
 import { User } from '../types';
 import Avatar from './Avatar';
 import GlobalFilter from './GlobalFilter';
-import UserEditModalForm from '../edit-form/EditForm';
+import UserEditModalForm from '../edit-user-form/EditForm';
 import AppPagination from './Pagination';
 import PageSizeControl from './PageSizeControl';
 import Icon from './Icons';

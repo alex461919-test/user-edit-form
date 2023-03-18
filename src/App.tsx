@@ -1,5 +1,5 @@
 import { Container } from 'react-bootstrap';
-import UsersTable from './table-components/UsersTable';
+import UsersTable from './users-table/UsersTable';
 
 function App() {
   return (
