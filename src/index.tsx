@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
 import { setupStore } from './service/store';
 import { Provider } from 'react-redux';
-import { ToastProvider } from './notify/toast-control';
+import { ToastProvider } from './notify/ToastControl';
+import { LoadingWaitProvider } from './notify/LoadingWaitControl';
 
 const store = setupStore();
 
@@ -14,11 +14,13 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 console.dir(root);
 root.render(
   <React.StrictMode>
-    <ToastProvider>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ToastProvider>
+    <Provider store={store}>
+      <ToastProvider position="bottom-end" className="p-2">
+        <LoadingWaitProvider position="top-end" className="p-2">
+          <App />
+        </LoadingWaitProvider>
+      </ToastProvider>
+    </Provider>
   </React.StrictMode>,
 );
 //

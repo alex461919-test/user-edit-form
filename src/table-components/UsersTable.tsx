@@ -19,11 +19,11 @@ import { User } from '../types';
 import Avatar from './Avatar';
 import GlobalFilter from './GlobalFilter';
 import UserEditModalForm from './EditForm';
-import { useAddToast } from '../notify/toast-control';
-import { ErrorToast, LoadingToast } from '../notify/toastSet';
 import AppPagination from './Pagination';
 import PageSizeControl from './PageSizeControl';
 import Icon from './Icons';
+import { useShowToast } from '../notify/ToastControl';
+import { useShowLoadingWait } from '../notify/LoadingWaitControl';
 
 const columnHelper = createColumnHelper<User>();
 
@@ -82,6 +82,9 @@ function UsersTable() {
     getRowId: originalRow => originalRow.id,
   });
 
+  const showToast = useShowToast();
+  const showLoadingWait = useShowLoadingWait();
+
   const [modalEditFormState, setModalEditFormState] = React.useState<{ show: true; user?: User } | { show: false }>({ show: false });
 
   const handleRowClick = (row: TableRow<User>) => {
@@ -93,21 +96,17 @@ function UsersTable() {
   };
   const hideModalForm = React.useCallback(() => setModalEditFormState({ show: false }), []);
 
-  const addToast = useAddToast();
-
   React.useEffect(() => {
     if (isLoading) {
-      return addToast(LoadingToast());
+      return showLoadingWait();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [isLoading, showLoadingWait]);
 
   React.useEffect(() => {
     if (isError && error) {
-      return addToast(ErrorToast(getHumanViewError(error)));
+      return showToast({ header: 'Ошибка', body: getHumanViewError(error), bg: 'danger' });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isError]);
+  }, [error, isError, showToast]);
 
   const rowsCount = table.getFilteredRowModel().rows.length;
   /*
