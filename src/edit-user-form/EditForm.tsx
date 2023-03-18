@@ -6,13 +6,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from '../service/store';
 import { User } from '../types';
 import { getHumanViewError } from '../service/helpers';
-import PhoneField from './edit-form-fields/Phone';
-import FirstNameField from './edit-form-fields/FirstName';
-import LastNameField from './edit-form-fields/LastName';
-import SexField from './edit-form-fields/Sex';
-import BirthdayField from './edit-form-fields/Birthday';
-import AvatarField from './edit-form-fields/Avatar';
-import EmailField from './edit-form-fields/Email';
+import PhoneField from '../table/edit-form-fields/Phone';
+import FirstNameField from '../table/edit-form-fields/FirstName';
+import LastNameField from '../table/edit-form-fields/LastName';
+import SexField from '../table/edit-form-fields/Sex';
+import BirthdayField from '../table/edit-form-fields/Birthday';
+import AvatarField from '../table/edit-form-fields/Avatar';
+import EmailField from '../table/edit-form-fields/Email';
 
 interface UserEditModalFormProps {
   user?: User;
