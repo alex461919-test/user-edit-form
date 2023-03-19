@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { css } from '@emotion/react';
-import { Button, Table, Row, Col } from 'react-bootstrap';
+import { Button, Table, Row, Col, Stack } from 'react-bootstrap';
 import {
   createColumnHelper,
   flexRender,
@@ -13,7 +13,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { emptyArray, getHumanViewError } from '../service/helpers';
+import { emptyArray, getHumanError } from '../service/helpers';
 import { useGetAllUsersQuery } from '../service/store';
 import { User } from '../types';
 import Avatar from './Avatar';
@@ -59,7 +59,7 @@ const tableStyle = css`
 const pageSizeSet = [10, 20, 30, 40, 50];
 
 function UsersTable() {
-  const { data = emptyArray, isLoading, isError, error, isFetching } = useGetAllUsersQuery();
+  const { data = emptyArray, isLoading, isError, error, isFetching, refetch } = useGetAllUsersQuery();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -104,9 +104,20 @@ function UsersTable() {
 
   React.useEffect(() => {
     if (isError && error) {
-      return showToast({ header: 'Ошибка', body: getHumanViewError(error), bg: 'danger' });
+      return showToast({
+        header: 'Ошибка',
+        body: (
+          <Stack gap={2}>
+            {getHumanError(error)}
+            <Button variant="primary" size="sm" className="align-self-end" onClick={refetch}>
+              Повторить?
+            </Button>
+          </Stack>
+        ),
+        bg: 'danger',
+      });
     }
-  }, [error, isError, showToast]);
+  }, [error, isError, refetch, showToast]);
 
   const rowsCount = table.getFilteredRowModel().rows.length;
   /*

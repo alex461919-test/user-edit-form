@@ -12,7 +12,7 @@ export function isErrorWithMessage(error: unknown): error is { message: string }
   return typeof error === 'object' && error != null && 'message' in error && typeof (error as any).message === 'string';
 }
 
-export function getHumanViewError(error: unknown): React.ReactNode {
+export function getHumanError(error: unknown): React.ReactNode {
   if (isErrorWithMessage(error)) {
     return error.message;
   } else if (isFetchBaseQueryError(error)) {

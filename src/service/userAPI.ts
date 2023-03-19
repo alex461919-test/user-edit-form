@@ -8,6 +8,7 @@ const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PR
 export const userApi = createApi({
   baseQuery: async (...args) => {
     await sleep(1000);
+    if (Math.random() < 0.3) throw Error('30% запросов к backend заканчиваются ошибкой. Вот она и случилась!');
     return fetchBaseQuery({ baseUrl })(...args);
   },
   tagTypes: ['User'],

@@ -5,7 +5,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from '../service/store';
 import { User } from '../types';
-import { getHumanViewError } from '../service/helpers';
+import { getHumanError } from '../service/helpers';
 import PhoneField from './edit-form-fields/Phone';
 import FirstNameField from './edit-form-fields/FirstName';
 import LastNameField from './edit-form-fields/LastName';
@@ -44,7 +44,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
       .unwrap()
       .then(handleHide)
       .catch(e => {
-        setFetchError(getHumanViewError(e));
+        setFetchError(getHumanError(e));
       });
   };
 
@@ -53,7 +53,7 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
       .unwrap()
       .then(handleHide)
       .catch(e => {
-        setFetchError(getHumanViewError(e));
+        setFetchError(getHumanError(e));
       });
   };
 
