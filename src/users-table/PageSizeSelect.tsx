@@ -1,6 +1,6 @@
 import { Form } from 'react-bootstrap';
 
-const PageSizeControl: React.FC<{ currentPageSize: number; onChangePageSize: (n: number) => void; pageSizeSet: number[] }> = ({
+const PageSizeSelect: React.FC<{ currentPageSize: number; onChangePageSize: (n: number) => void; pageSizeSet: number[] }> = ({
   currentPageSize,
   onChangePageSize,
   pageSizeSet,
@@ -30,4 +30,4 @@ const PageSizeControl: React.FC<{ currentPageSize: number; onChangePageSize: (n:
     </div>
   );
 };
-export default PageSizeControl;
+export default PageSizeSelect;

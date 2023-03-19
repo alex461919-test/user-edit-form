@@ -20,7 +20,7 @@ import Avatar from './Avatar';
 import GlobalFilter from './GlobalFilter';
 import UserEditModalForm from '../edit-user-form/EditForm';
 import AppPagination from './Pagination';
-import PageSizeControl from './PageSizeControl';
+import PageSizeSelect from './PageSizeSelect';
 import Icon from './Icons';
 import { useShowToast } from '../notify/ToastControl';
 import { useShowLoadingWait } from '../notify/LoadingWaitControl';
@@ -141,9 +141,9 @@ function UsersTable() {
                   onChangePage: page => table.setPageIndex(page - 1),
                   disabled: isFetching,
                 }}
-                className="my-3 me-4"
+                className="me-4"
               />
-              <PageSizeControl onChangePageSize={table.setPageSize} currentPageSize={pageSize} pageSizeSet={pageSizeSet} />
+              <PageSizeSelect onChangePageSize={table.setPageSize} currentPageSize={pageSize} pageSizeSet={pageSizeSet} />
             </div>
           ) : null}
         </Col>

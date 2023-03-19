@@ -45,7 +45,7 @@
     "timeout": "delay 5",
     "json-server-dev": "ts-node-dev server --watch",
     "json-server": "ts-node server",
-    "dev": "concurrently \"npm:json-server\" \"npm run timeout && npm run start\""
+    "dev": "concurrently \"npm:json-server-dev\" \"npm run timeout && npm run start\""
   },
   "eslintConfig": {
     "extends": [
