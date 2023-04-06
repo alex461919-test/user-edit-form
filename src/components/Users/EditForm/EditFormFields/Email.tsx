@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, FormGroupProps } from 'react-bootstrap';
 import { UseFormReturn } from 'react-hook-form';
-import { User } from '../../types';
+import { User } from 'src/types';
 
 const EmailField: React.FC<FormGroupProps & { formHook: UseFormReturn<User, any> }> = ({ formHook, ...formGroupProps }) => {
   const {

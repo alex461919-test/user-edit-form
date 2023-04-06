@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { User } from '../types';
+import { User } from 'src/types';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -8,7 +8,7 @@ const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PR
 export const userApi = createApi({
   baseQuery: async (...args) => {
     await sleep(1000);
-    if (Math.random() < 0.3) throw Error('30% запросов к backend заканчиваются ошибкой. Вот она и случилась!');
+    if (Math.random() < 0.1) throw Error('10% запросов к backend заканчиваются ошибкой. Вот она и случилась!');
     return fetchBaseQuery({ baseUrl })(...args);
   },
   tagTypes: ['User'],

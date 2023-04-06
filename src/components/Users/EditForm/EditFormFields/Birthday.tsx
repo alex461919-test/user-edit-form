@@ -4,7 +4,7 @@ import { Controller, UseFormReturn } from 'react-hook-form';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ru from 'date-fns/locale/ru';
-import { User } from '../../types';
+import { User } from 'src/types';
 
 registerLocale('ru', ru);
 

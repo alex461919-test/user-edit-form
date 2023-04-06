@@ -1,6 +1,6 @@
 import React from 'react';
 import { Toast, ToastContainer, ToastContainerProps, ToastProps } from 'react-bootstrap';
-import useMap from '../service/useMap';
+import useMap from 'src/lib/useMap';
 
 interface CustomToastProps extends ToastProps {
   header: React.ReactNode;

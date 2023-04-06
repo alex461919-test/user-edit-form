@@ -3,16 +3,17 @@ import { css } from '@emotion/react';
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from '../service/store';
-import { User } from '../types';
-import { getHumanError } from '../service/helpers';
-import PhoneField from './edit-form-fields/Phone';
-import FirstNameField from './edit-form-fields/FirstName';
-import LastNameField from './edit-form-fields/LastName';
-import SexField from './edit-form-fields/Sex';
-import BirthdayField from './edit-form-fields/Birthday';
-import AvatarField from './edit-form-fields/Avatar';
-import EmailField from './edit-form-fields/Email';
+import { useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from 'src/api/store';
+import { User } from 'src/types';
+import { getHumanError } from 'src/lib/helpers';
+import PhoneField from './EditFormFields/Phone';
+import FirstNameField from './EditFormFields/FirstName';
+import LastNameField from './EditFormFields/LastName';
+import SexField from './EditFormFields/Sex';
+import BirthdayField from './EditFormFields/Birthday';
+import AvatarField from './EditFormFields/Avatar';
+import EmailField from './EditFormFields/Email';
+import { useShowLoadingWait } from 'src/components/notify/LoadingWaitControl';
 
 interface UserEditModalFormProps {
   user?: User;
@@ -36,25 +37,30 @@ function UserEditModalForm({ user, onClose = () => {} }: UserEditModalFormProps)
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
   const [modalVisible, setModalVisible] = React.useState(true);
+  const showLoadingWait = useShowLoadingWait();
 
   const userId = getValues().id;
 
   const handleSave: SubmitHandler<User> = data => {
+    const hideWait = showLoadingWait();
     (userId ? updateUser(data) : addUser(data))
       .unwrap()
       .then(handleHide)
       .catch(e => {
         setFetchError(getHumanError(e));
-      });
+      })
+      .finally(() => hideWait());
   };
 
   const handleDelete = () => {
+    const hideWait = showLoadingWait();
     deleteUser(userId)
       .unwrap()
       .then(handleHide)
       .catch(e => {
         setFetchError(getHumanError(e));
-      });
+      })
+      .finally(() => hideWait());
   };
 
   const handleHide = React.useCallback(() => {

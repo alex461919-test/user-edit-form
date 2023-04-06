@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { setupStore } from './service/store';
+import { setupStore } from './api/store';
 import { Provider } from 'react-redux';
-import { ToastProvider } from './notify/ToastControl';
-import { LoadingWaitProvider } from './notify/LoadingWaitControl';
+import { ToastProvider } from './components/notify/ToastControl';
+import { LoadingWaitProvider } from './components/notify/LoadingWaitControl';
 
 const store = setupStore();
 

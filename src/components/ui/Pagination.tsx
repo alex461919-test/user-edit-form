@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Pagination } from 'react-bootstrap';
-import { IPaginationParams, usePagination } from '../service/usePagination';
+import { IPaginationParams, usePagination } from 'src/lib/usePagination';
 
 const AppPagination: React.FC<
   IPaginationParams & {

@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { ToastContainer, ToastContainerProps } from 'react-bootstrap';
-import useSet from '../service/useSet';
+import useSet from 'src/lib/useSet';
 
 type LoadingWaitContextType = () => () => void;
 

@@ -1,6 +1,6 @@
 import jsonServer from 'json-server';
 import { existsSync, writeFileSync } from 'fs';
-import fakeUsers from './src/service/fakeUsers';
+import fakeUsers from './src/lib/fakeUsers';
 import { getReasonPhrase } from 'http-status-codes';
 
 const server = jsonServer.create();

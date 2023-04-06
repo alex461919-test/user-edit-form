@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, FormGroupProps } from 'react-bootstrap';
 import MaskedInput, { MaskedInputProps } from 'react-text-mask';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import { User } from '../../types';
+import { User } from 'src/types';
 
 const PhoneField: React.FC<FormGroupProps & { formHook: UseFormReturn<User, any> }> = ({ formHook, ...formGroupProps }) => {
   const {

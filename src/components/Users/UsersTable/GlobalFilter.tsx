@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
-import Icon from './Icons';
+import Icon from '../../ui/Icons';
 
 const filterStyle = css`
   position: relative;

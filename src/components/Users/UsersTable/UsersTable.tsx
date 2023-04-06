@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { css } from '@emotion/react';
-import { Button, Table, Row, Col, Stack } from 'react-bootstrap';
+import { Button, Table, Row, Col } from 'react-bootstrap';
 import {
   createColumnHelper,
   flexRender,
@@ -13,17 +13,18 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { emptyArray, getHumanError } from '../service/helpers';
-import { useGetAllUsersQuery } from '../service/store';
-import { User } from '../types';
-import Avatar from './Avatar';
-import GlobalFilter from './GlobalFilter';
-import UserEditModalForm from '../edit-user-form/EditForm';
-import AppPagination from './Pagination';
+import { User } from 'src/types';
+import Avatar from '../../ui/Avatar';
+import Icon from '../../ui/Icons';
+import UserEditModalForm from '../EditForm/EditForm';
+import AppPagination from '../../ui/Pagination';
 import PageSizeSelect from './PageSizeSelect';
-import Icon from './Icons';
-import { useShowToast } from '../notify/ToastControl';
-import { useShowLoadingWait } from '../notify/LoadingWaitControl';
+import GlobalFilter from './GlobalFilter';
+
+interface UsersTableProps {
+  data: User[];
+  isFetching: boolean;
+}
 
 const columnHelper = createColumnHelper<User>();
 
@@ -58,9 +59,7 @@ const tableStyle = css`
 
 const pageSizeSet = [10, 20, 30, 40, 50];
 
-function UsersTable() {
-  const { data = emptyArray, isLoading, isError, error, isFetching, refetch } = useGetAllUsersQuery();
-
+const UsersTable: React.FC<UsersTableProps> = ({ data, isFetching }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
@@ -82,9 +81,6 @@ function UsersTable() {
     getRowId: originalRow => originalRow.id,
   });
 
-  const showToast = useShowToast();
-  const showLoadingWait = useShowLoadingWait();
-
   const [modalEditFormState, setModalEditFormState] = React.useState<{ show: true; user?: User } | { show: false }>({ show: false });
 
   const handleRowClick = (row: TableRow<User>) => {
@@ -95,29 +91,6 @@ function UsersTable() {
     !modalEditFormState.show && setModalEditFormState({ show: true });
   };
   const hideModalForm = React.useCallback(() => setModalEditFormState({ show: false }), []);
-
-  React.useEffect(() => {
-    if (isLoading) {
-      return showLoadingWait();
-    }
-  }, [isLoading, showLoadingWait]);
-
-  React.useEffect(() => {
-    if (isError && error) {
-      return showToast({
-        header: 'Ошибка',
-        body: (
-          <Stack gap={2}>
-            {getHumanError(error)}
-            <Button variant="primary" size="sm" className="align-self-end" onClick={refetch}>
-              Повторить?
-            </Button>
-          </Stack>
-        ),
-        bg: 'danger',
-      });
-    }
-  }, [error, isError, refetch, showToast]);
 
   const rowsCount = table.getFilteredRowModel().rows.length;
   /*
@@ -215,6 +188,6 @@ function UsersTable() {
       </Table>
     </>
   );
-}
+};
 
 export default UsersTable;

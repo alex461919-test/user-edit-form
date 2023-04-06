@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form, FormGroupProps } from 'react-bootstrap';
 import { UseFormReturn } from 'react-hook-form';
-import { User } from '../../types';
+import { User } from 'src/types';
 
-const LastNameField: React.FC<FormGroupProps & { formHook: UseFormReturn<User, any> }> = ({ formHook, ...formGroupProps }) => {
+const FirstNameField: React.FC<FormGroupProps & { formHook: UseFormReturn<User, any> }> = ({ formHook, ...formGroupProps }) => {
   const {
     register,
     formState: { errors },
@@ -11,17 +11,17 @@ const LastNameField: React.FC<FormGroupProps & { formHook: UseFormReturn<User, a
   return (
     <Form.Group {...formGroupProps}>
       <Form.Label size="sm" className="required">
-        Фамилия
+        Имя
       </Form.Label>
       <Form.Control
         size="sm"
         type="text"
-        //   placeholder="Введите фамилию"
-        {...register('lastName', { required: true })}
-        {...(errors.lastName ? { isInvalid: true } : null)}
+        //    placeholder="Введите имя"
+        {...register('firstName', { required: true })}
+        {...(errors.firstName ? { isInvalid: true } : null)}
       />
     </Form.Group>
   );
 };
 
-export default LastNameField;
+export default FirstNameField;

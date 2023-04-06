@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { User } from '../types';
+import { User } from 'src/types';
 
 faker.setLocale('ru');
 
